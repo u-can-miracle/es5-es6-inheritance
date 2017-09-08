@@ -16,27 +16,40 @@ class B extends A {
 }
 
 /* ES5 equivalent */
-function C() {
-  this.c = 100
+function C(name) {
+  this.name = name;
 }
 
 C.prototype.print = function() {
-  console.log(this.c, this.d)
+  console.log(this.name, this.secondName)
 }
 
-function D() {
-	C.call(this);
+function D(name, secondName) {
+	C.call(this, name);
 
-  this.d = 200
+  this.secondName = secondName
 }
+// D.prototype.method = function(){}
+// will be owerriden by
+// D.prototype = Object.create(C.prototype)
 
 D.prototype = Object.create(C.prototype)
 
+// Rabbit.prototype.constructor was overriden by
+// D.prototype = Object.create(C.prototype)
+D.prototype.constructor = D
+
+
+D.prototype.prop = 'prop'
+D.prototype.dMethod = function(){
+	console.log('dMethod');
+}
 
 let a = new A()
 let b = new B()
 let c = new C()
-let d = new D()
+let d = new D('1stName', '2ndName')
 
 d.print();
 console.log(d);
+d.dMethod();
